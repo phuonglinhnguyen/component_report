@@ -35,8 +35,15 @@ const styles: any = (theme: any) => {
 };
 
 const FilterComponent = (props) => {
-	const { classes, setPrjNameSearch, setUserNameSearch,setFullNameSearch ,setGroupNameSearch,setLocationSearch} = props;
-	const {prjNameSearch, userNameSearch, fullNameSearch, groupNameSearch, locationSearch} = props;
+	const {
+		classes,
+		setPrjNameSearch,
+		setUserNameSearch,
+		setFullNameSearch,
+		setGroupNameSearch,
+		setLocationSearch
+	} = props;
+	const { prjNameSearch, userNameSearch, fullNameSearch, groupNameSearch, locationSearch } = props;
 	const [ location, setLocation ] = useState('');
 	const [ workType, setWorkType ] = useState('');
 	const locations = [ { label: 'HCM', value: 'hcm' }, { label: 'CTB', value: 'ctb' } ];
@@ -54,17 +61,17 @@ const FilterComponent = (props) => {
 
 	const onSearchUser = (e) => {
 		const value = e.target.value;
-			setUserNameSearch(value); 
+		setUserNameSearch(value);
 	};
 
-	const onSearchFullname= (e) => {
+	const onSearchFullname = (e) => {
 		const value = e.target.value;
-			setFullNameSearch(value);
+		setFullNameSearch(value);
 	};
 
-	const onSearchGroupname= (e) => {
+	const onSearchGroupname = (e) => {
 		const value = e.target.value;
-			setGroupNameSearch(value);
+		setGroupNameSearch(value);
 	};
 
 	// const onSearchType = (e) => {
@@ -74,7 +81,7 @@ const FilterComponent = (props) => {
 
 	const onSearchLocation = (e) => {
 		const value = e.target.value;
-			setLocationSearch(value);
+		setLocationSearch(value);
 	};
 
 	return (

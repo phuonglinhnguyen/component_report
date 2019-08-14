@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { get, isEmpty, filter } from 'lodash';
+import { get, filter, map } from 'lodash';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -8,7 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import FilterComponent from './FilterComponent';
-
+import moment from 'moment';
 const styles: any = (theme: any) => {
 	return {
 		rowSmall: {
@@ -38,13 +38,38 @@ const ReportComponent = (props) => {
 	const [ userNameSearch, setUserNameSearch ] = useState('');
 	const [ fullNameSearch, setFullNameSearch ] = useState('');
 	const [ groupNameSearch, setGroupNameSearch ] = useState('');
+	const [ workTypeSearch, setWorkTypeSearch ] = useState('');
+	const [ layoutSearch, setLayoutSearch ] = useState('');
 	const [ locationSearch, setLocationSearch ] = useState('');
+	const [ sectionSearch, setSectionSearch ] = useState('');
+	const [ stepSearch, setStepSearch ] = useState('');
+	const [ fromDateSearch, setFromdDateSearch ] = useState('');
+	const [ toDateSearch, setToDateSearch ] = useState('');
 
+	//filter
 	const filterData = (data, field, strSearch) => {
-		const strSearchLowercase = strSearch.toLowerCase();
+		const strSearchLowercase = strSearch ? String(strSearch).toLowerCase() : '';
 		return filter(data, (item) => {
-			const fieldTextLowercase = item[field] || '';
+			const fieldTextLowercase = item[field] ? String(item[field]).toLowerCase() : '';
+			if (!fieldTextLowercase) return false;
 			return fieldTextLowercase.indexOf(strSearchLowercase) + 1;
+		});
+	};
+
+	const filterDatetime = (exportsArray, beginDatetime, endDatetime) => {
+		const beginTime = beginDatetime ? moment(beginDatetime).valueOf() : null;
+		const endTime = endDatetime ? moment(endDatetime).valueOf() : null;
+		return exportsArray.filter((exportConfig) => {
+			const captureTime = moment(exportConfig.capture_date).valueOf();
+			if (beginTime && endTime) {
+				return beginTime <= captureTime && captureTime <= endTime;
+			} else if (beginTime) {
+				return captureTime >= beginTime;
+			} else if (endTime) {
+				return captureTime <= endTime;
+			} else {
+				return true;
+			}
 		});
 	};
 
@@ -68,12 +93,65 @@ const ReportComponent = (props) => {
 		groupNameFilteredData = filterData(fullNameFilteredData, 'group_name', groupNameSearch);
 	}
 
-	let locationFilteredData = groupNameFilteredData;
-	if (locationSearch) {
-		locationFilteredData = filterData(groupNameFilteredData, 'location', locationSearch);
+	let workTypeFilteredData = groupNameFilteredData;
+	if (workTypeSearch) {
+		workTypeFilteredData = filterData(groupNameFilteredData, 'work_type', workTypeSearch);
 	}
+
+	let layoutFilteredData = workTypeFilteredData;
+	if (layoutSearch) {
+		layoutFilteredData = filterData(workTypeFilteredData, 'layout', layoutSearch);
+	}
+
+	let locationFilteredData = layoutFilteredData;
+	if (locationSearch) {
+		locationFilteredData = filterData(layoutFilteredData, 'location', locationSearch);
+	}
+	let sectionFilteredData = locationFilteredData;
+	if (sectionSearch) {
+		sectionFilteredData = filterData(locationFilteredData, 'section', sectionSearch);
+	}
+	let stepFilteredData = sectionFilteredData;
+	if (stepSearch) {
+		stepFilteredData = filterData(sectionFilteredData, 'step', stepSearch);
+	}
+
+	let dateFilteredData = stepFilteredData;
+	dateFilteredData = filterDatetime(stepFilteredData, fromDateSearch, '');
+
+	let dateToDateFilteredData = dateFilteredData;
+	dateToDateFilteredData = filterDatetime(dateFilteredData, fromDateSearch, toDateSearch);
+
+	//sum
+	const amount = map(stepFilteredData, 'total_amount', []);
+	const time = map(stepFilteredData, 'total_time', []);
+	const speed = map(stepFilteredData, 'total_speed', []);
+	const target_speed = map(stepFilteredData, 'target_speed', []);
+
+	let sum_amount = 0;
+	let sum_time = 0;
+	let sum_speed = 0;
+	let sum_target_speed = 0;
+
+	for (let i = 0; i < amount.length; i++) {
+		sum_amount += amount[i];
+	}
+
+	for (let i = 0; i < time.length; i++) {
+		sum_time += time[i];
+	}
+
+	for (let i = 0; i < speed.length; i++) {
+		sum_speed += speed[i];
+	}
+
+	for (let i = 0; i < target_speed.length; i++) {
+		sum_target_speed += target_speed[i];
+	}
+
 	return (
 		<div>
+		
 			<Paper style={{ overflow: 'auto' }}>
 				<Table>
 					<TableHead>
@@ -109,7 +187,7 @@ const ReportComponent = (props) => {
 							<TableCell align="center" className={classes.rowMedium}>
 								Capture Date
 							</TableCell>
-							<TableCell align="center" className={classes.rowLarge}>
+							<TableCell align="center" className={classes.rowMedium}>
 								Unit
 							</TableCell>
 							<TableCell align="center" className={classes.rowSmall}>
@@ -131,7 +209,7 @@ const ReportComponent = (props) => {
 			<Paper style={{ overflow: 'auto', height: '500px' }}>
 				<Table style={{ tableLayout: 'fixed' }}>
 					<TableBody>
-						{locationFilteredData.map((item, index) => {
+						{dateToDateFilteredData.map((item, index) => {
 							return (
 								<TableRow>
 									<TableCell className={classes.rowSmall}>{index + 1}</TableCell>
@@ -161,7 +239,7 @@ const ReportComponent = (props) => {
 										{item.step}
 									</TableCell>
 									<TableCell className={classes.rowMedium}>{item.capture_date}</TableCell>
-									<TableCell align="center" className={classes.rowLarge}>
+									<TableCell align="center" className={classes.rowMedium}>
 										{item.unit}
 									</TableCell>
 									<TableCell className={classes.rowSmall}>{item.total_amount}</TableCell>
@@ -174,36 +252,54 @@ const ReportComponent = (props) => {
 					</TableBody>
 				</Table>
 			</Paper>
-			<Paper style={{ background: 'lightgray' }}>
+			<div style={{ background: 'lightgray' }}>
 				<Table>
 					<TableBody>
 						<TableRow>
 							<TableCell>Sum</TableCell>
 							<div style={{ width: '20%', float: 'right' }}>
 								<TableCell className={classes.rowSum} align="right">
-									475
+									{sum_amount ? sum_amount : 0}
 								</TableCell>
 								<TableCell className={classes.rowSum} align="right">
-									0.852
+									{sum_time ? sum_time.toFixed(3) : 0}
 								</TableCell>
 								<TableCell className={classes.rowSum} align="right">
-									0.741
+									{sum_speed ? sum_speed.toFixed(3) : 0}
 								</TableCell>
 								<TableCell className={classes.rowSum} align="right">
-									0
+									{sum_target_speed ? sum_target_speed.toFixed(2) : 0}
 								</TableCell>
 							</div>
 						</TableRow>
 					</TableBody>
 				</Table>
-			</Paper>
+			</div>
 			<FilterComponent
+				dateToDateFilteredData={dateToDateFilteredData}
 				reports={reports}
 				setPrjNameSearch={setPrjNameSearch}
+				prjNameSearch={prjNameSearch}
 				setUserNameSearch={setUserNameSearch}
+				userNameSearch={userNameSearch}
 				setFullNameSearch={setFullNameSearch}
+				fullNameSearch={fullNameSearch}
 				setGroupNameSearch={setGroupNameSearch}
+				groupNameSearch={groupNameSearch}
+				workTypeSearch={workTypeSearch}
+				setWorkTypeSearch={setWorkTypeSearch}
+				layoutSearch={layoutSearch}
+				setLayoutSearch={setLayoutSearch}
 				setLocationSearch={setLocationSearch}
+				locationSearch={locationSearch}
+				sectionSearch={sectionSearch}
+				setSectionSearch={setSectionSearch}
+				stepSearch={stepSearch}
+				setStepSearch={setStepSearch}
+				fromDateSearch={fromDateSearch}
+				setFromdDateSearch={setFromdDateSearch}
+				toDateSearch={toDateSearch}
+				setToDateSearch={setToDateSearch}
 			/>
 		</div>
 	);
