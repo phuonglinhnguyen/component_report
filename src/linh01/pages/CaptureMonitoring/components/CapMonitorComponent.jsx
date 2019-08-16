@@ -12,7 +12,7 @@ import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 const styles: any = (theme: any) => {
 	return {
 		rowSmall: {
-			width: '5%',
+			width: '4%',
 			padding: '10px'
 		},
 		rowLarge: {
@@ -24,7 +24,7 @@ const styles: any = (theme: any) => {
 			padding: '10px'
 		},
 		ass: {
-			width: '40px'
+			width: '30px'
 		}
 	};
 };
@@ -59,7 +59,7 @@ const CapMonitorComponent = (props) => {
 					<Table>
 						<TableHead style={{ background: 'lightgray' }}>
 							<TableRow>
-								<TableCell style={{ width: '20px' }}>No.</TableCell>
+								<TableCell style={{ width: '2%' }}>No.</TableCell>
 								<TableCell align="center" className={classes.rowSmall}>
 									Imported Date
 								</TableCell>

@@ -15,7 +15,7 @@ export interface LayoutDefautProps {
 	selectItemGroupTree?: (...args: any[]) => void | any
 }
 
-class Dashboard extends React.Component<LayoutDefautProps, any> {
+class ReportPrtformance extends React.Component<LayoutDefautProps, any> {
 	componentWillMount = () => {
 		const { getData, data } = this.props;
 		getData(data);
@@ -42,4 +42,4 @@ export default compose(
 		})
 	}),
 	withStyles(DashboardStyle, { withTheme: true })
-)(Dashboard);
+)(ReportPrtformance);
