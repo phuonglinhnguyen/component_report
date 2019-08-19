@@ -118,15 +118,15 @@ const CapMonitorComponent = (props) => {
 				<Paper style={{ overflow: 'auto', height: '675px' }}>
 					<Table style={{ tableLayout: 'fixed' }}>
 						<TableBody>
-							{captureMonitors.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, index) => {
+							{captureMonitors.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((cap, index) => {
 								return (
 									<TableRow>
 										<TableCell style={{ width: '20px' }}>{index + 1}</TableCell>
 										<TableCell align="right" className={classes.ass}>
-											{item.import_date}
+											{cap.import_date}
 										</TableCell>
 										<TableCell align="center" style={{ width: '140px' }}>
-											{item.file_path}
+											{cap.file_path}
 										</TableCell>
 										<TableCell
 											align="center"
@@ -135,49 +135,49 @@ const CapMonitorComponent = (props) => {
 												padding: '10px'
 											}}
 										>
-											{item.batch_name}
+											{cap.batch_name}
 										</TableCell>
 										<TableCell align="right" className={classes.ass}>
-											{item.imported_amount}
+											{cap.imported_amount}
 										</TableCell>
 										<TableCell align="right" className={classes.ass}>
-											{item.classify}
+											{cap.classify}
 										</TableCell>
 										<TableCell align="right" className={classes.ass}>
-											{item.omr}
+											{cap.omr}
 										</TableCell>
 										<TableCell align="right" className={classes.ass}>
-											{item.invoice_header}
+											{cap.invoice_header}
 										</TableCell>
 										<TableCell align="right" className={classes.ass}>
-											{item.invoice_item}
+											{cap.invoice_item}
 										</TableCell>
 										<TableCell align="right" className={classes.ass}>
-											{item.verify}
+											{cap.verify}
 										</TableCell>
 										<TableCell align="right" className={classes.ass}>
-											{item.finished_capture}
+											{cap.finished_capture}
 										</TableCell>
 										<TableCell align="right" className={classes.ass}>
-											{item.available_QC}
+											{cap.available_QC}
 										</TableCell>
 										<TableCell align="right" className={classes.ass}>
-											{item.finished_QC}
+											{cap.finished_QC}
 										</TableCell>
 										<TableCell align="right" className={classes.ass}>
-											{item.available_QC_Approval}
+											{cap.available_QC_Approval}
 										</TableCell>
 										<TableCell align="right" className={classes.ass}>
-											{item.finished_QC_Approval}
+											{cap.finished_QC_Approval}
 										</TableCell>
 										<TableCell align="right" className={classes.ass}>
-											{item.available_export}
+											{cap.available_export}
 										</TableCell>
 										<TableCell className={classes.ass} align="right">
-											{item.finished_export}
+											{cap.finished_export}
 										</TableCell>
 										<TableCell className={classes.ass} align="right">
-											{item.export_date}
+											{cap.export_date}
 										</TableCell>
 									</TableRow>
 								);
@@ -186,7 +186,6 @@ const CapMonitorComponent = (props) => {
 					</Table>
 				</Paper>
 				<TablePagination
-					style={{ background: '#fff', position: 'fixed', bottom: '20px', width: '100%' }}
 					rowsPerPageOptions={[ 5, 10, 25 ]}
 					component="div"
 					count={captureMonitors.length}
