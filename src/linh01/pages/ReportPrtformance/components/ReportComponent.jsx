@@ -352,7 +352,7 @@ const ReportComponent = (props) => {
 					</TableHead>
 				</Table>
 			</Paper>
-			<Paper style={{ overflow: 'auto', height: '650px' }}>
+			<Paper style={{ overflow: 'auto', height: '500px' }}>
 				<Table style={{ tableLayout: 'fixed' }}>
 					<TableBody>
 						{dateToDateFilteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, index) => {

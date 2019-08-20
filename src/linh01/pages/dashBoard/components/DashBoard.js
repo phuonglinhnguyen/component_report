@@ -1,9 +1,10 @@
 import React from 'react';
+import { BrowserRouter, Route, Link, Switch } from 'react-router-dom';
 import classNames from 'classnames';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
@@ -13,184 +14,189 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
-import { Switch, Route } from 'react-router-dom';
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
-import dashboardRoutes from './dashboardRoutes';
-import MonitorRoutes from './../routes/MonitorRoutes';
+import Collapse from '@material-ui/core/Collapse';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import MonitorRoutes from '../routes/MonitorRoutes';
+import dashboardRoutes from '../routes/dashboardRoutes';
 
-import ReportPrtformance from '../../ReportPrtformance';
-import CaptureMonitoring from '../../CaptureMonitoring';
 const drawerWidth = 240;
 
 const theme_override = createMuiTheme({
 	overrides: {
 		MuiDrawer: {
 			paper: {
-				height: '980px'
+				height: '858px',
+				top: 'none'
+			}
+		},
+		DashBoard: {
+			toolbar: {
+				justifyContent: 'space-between'
 			}
 		}
 	}
 });
 
 const styles = (theme) => ({
-	dashboard_root: {
-		display: 'flex'
-	},
-	appBar: {
-		zIndex: theme.zIndex.drawer + 1,
-		transition: theme.transitions.create([ 'width', 'margin' ], {
-			easing: theme.transitions.easing.sharp,
-			duration: theme.transitions.duration.leavingScreen
-		})
-	},
-	appBarShift: {
-		marginLeft: drawerWidth,
-		width: `calc(100% - ${drawerWidth}px)`,
-		transition: theme.transitions.create([ 'width', 'margin' ], {
-			easing: theme.transitions.easing.sharp,
-			duration: theme.transitions.duration.enteringScreen
-		})
+	testList: {
+		fontWeight: 'bold',
+		cursor: 'pointer',
+		transition: 'background 0.1s ease-in',
+		'&:hover': {
+			background: 'lightgray'
+		}
 	},
 	menuButton: {
 		marginLeft: 12,
-		marginRight: 36
+		marginRight: 20
 	},
 	hide: {
 		display: 'none'
 	},
 	drawer: {
 		width: drawerWidth,
-		flexShrink: 0,
-		whiteSpace: 'nowrap'
+		flexShrink: 0
 	},
-	drawerOpen: {
+	drawerPaper: {
 		width: drawerWidth,
-		transition: theme.transitions.create('width', {
-			easing: theme.transitions.easing.sharp,
-			duration: theme.transitions.duration.enteringScreen
-		})
+		background: '#3c4858',
+		color: 'wheat'
 	},
-	drawerClose: {
-		transition: theme.transitions.create('width', {
-			easing: theme.transitions.easing.sharp,
-			duration: theme.transitions.duration.leavingScreen
-		}),
-		overflowX: 'hidden',
-		width: theme.spacing.unit * 7 + 1,
-		[theme.breakpoints.up('sm')]: {
-			width: theme.spacing.unit * 9 + 1
-		}
-	},
-	toolbar: {
+	drawerHeader: {
 		display: 'flex',
 		alignItems: 'center',
-		justifyContent: 'flex-end',
 		padding: '0 8px',
-		...theme.mixins.toolbar
+		...theme.mixins.toolbar,
+		justifyContent: 'flex-end'
 	},
 	content: {
 		flexGrow: 1,
+		transition: theme.transitions.create('margin', {
+			easing: theme.transitions.easing.sharp,
+			duration: theme.transitions.duration.leavingScreen
+		}),
+		marginLeft: 0
+	},
+	contentShift: {
+		transition: theme.transitions.create('margin', {
+			easing: theme.transitions.easing.easeOut,
+			duration: theme.transitions.duration.enteringScreen
+		}),
+		marginLeft: drawerWidth
+	},
+	itemLink: {
+		textDecoration: 'none',
+		color: 'wheat',
+		'&:hover': {
+			color: 'white'
+		}
+	},
+	nested: {
+		paddingLeft: '40px',
+		fontWeight: 'bold'
 	}
 });
 
 const DashBoard = (props) => {
 	const { classes, theme } = props;
 	const [ open, setOpen ] = React.useState(false);
-
-	const handleDrawerOpen = () => {
-		setOpen(true);
-	};
-
-	const handleDrawerClose = () => {
-		setOpen(false);
-	};
-
+	const [ open1, setOpen1 ] = React.useState(false);
 	return (
-		<div className={classes.dashboard_root}>
-			<MuiThemeProvider theme={theme_override}>
-				<CssBaseline />
-				<AppBar
-					position="fixed"
-					className={classNames(classes.appBar, {
-						[classes.appBarShift]: open
-					})}
-				>
-					<Toolbar disableGutters={!open}>
-						<IconButton
-							color="inherit"
-							aria-label="Open drawer"
-							onClick={handleDrawerOpen}
-							className={classNames(classes.menuButton, {
-								[classes.hide]: open
-							})}
-						>
-							<MenuIcon />
-						</IconButton>
-						<Typography variant="h6" color="inherit" noWrap>
-							Basic Component
-						</Typography>
-					</Toolbar>
-				</AppBar>
-				<Drawer
-					variant="permanent"
-					className={classNames(classes.drawer, {
-						[classes.drawerOpen]: open,
-						[classes.drawerClose]: !open
-					})}
-					classes={{
-						paper: classNames({
-							[classes.drawerOpen]: open,
-							[classes.drawerClose]: !open
-						})
-					}}
-					open={open}
-				>
-					<div className={classes.toolbar}>
-						<span>Projects</span>
-						<IconButton onClick={handleDrawerClose}>
-							{theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-						</IconButton>
+		<BrowserRouter>
+			<div className={classes.root}>
+				<MuiThemeProvider theme={theme_override}>
+					<CssBaseline />
+					<div style={{ background: 'bottom', width: '100%' }}>
+						<Toolbar disableGutters={!open}>
+							<IconButton
+								color="inherit"
+								aria-label="Open drawer"
+								onClick={() => setOpen(true)}
+								className={classNames(classes.menuButton, open && classes.hide)}
+							>
+								<MenuIcon />
+							</IconButton>
+							<Typography variant="h6" color="inherit" noWrap style={{ fontWeight: 'bold' }}>
+								MONITORING
+							</Typography>
+						</Toolbar>
 					</div>
-					<Divider />
-					<List>
-						{MonitorRoutes.map((item, index) => (
-							<ListItem
-								button
-								key={item}
+					<Drawer
+						className={classes.drawer}
+						variant="persistent"
+						anchor="left"
+						open={open}
+						classes={{
+							paper: classes.drawerPaper
+						}}
+					>
+						<div className={classes.drawerHeader}>
+							<span style={{ fontWeight: 'bold', paddingRight: '20px' }}>PROJECTS</span>
+							<IconButton
 								onClick={() => {
-									console.log(item);
+									setOpen(false);
 								}}
 							>
-								<ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-								<ListItemText primary={item.name} />
-							</ListItem>
-						))}
-					</List>
-				</Drawer>
-				<main className={classes.content}>
-          <ReportPrtformance/>
-          {/* <CaptureMonitoring/> */}
-					{/* <Switch>
-						{dashboardRoutes.map((route, index) => {
-              console.log(route)
-							return route.component ? (
-								<Route
-									key={index}
-									path={route.path}
-									exact={route.exact}
-									name={route.name}
-									render={(props) => <route.component {...props} />}
-								/>
-							) : null;
+								{theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+							</IconButton>
+						</div>
+						<Divider />
+						<List>
+							{MonitorRoutes.map((item, index) => {
+								return (
+									<div>
+										<ListItem
+											className={classes.testList}
+											onClick={() => {
+												setOpen1(!open1);
+											}}
+										>
+											{open1 ? <ExpandLess /> : <ExpandMore />}
+											<Link to={item.url} key={index} className={classes.itemLink}>
+												{item.name}
+											</Link>
+										</ListItem>
+										<Collapse in={open1} timeout="auto" unmountOnExit>
+											<List component="div" disablePadding>
+												{item.children.map((ex, i) => {
+													return (
+														<ListItem button className={classes.nested}>
+															<Link to={ex.url} key={i} className={classes.itemLink}>
+																{ex.name}
+															</Link>
+														</ListItem>
+													);
+												})}
+											</List>
+										</Collapse>
+									</div>
+								);
+							})}
+						</List>
+					</Drawer>
+					<main
+						className={classNames(classes.content, {
+							[classes.contentShift]: open
 						})}
-					</Switch> */}
-				</main>
-			</MuiThemeProvider>
-		</div>
+					>
+						<Switch>
+							{dashboardRoutes.map((route, index) => {
+								return (
+									<Route
+										key={index}
+										path={route.path}
+										exact={route.exact}
+										name={route.name}
+										component={route.component}
+									/>
+								);
+							})}
+						</Switch>
+					</main>
+				</MuiThemeProvider>
+			</div>
+		</BrowserRouter>
 	);
 };
 export default withStyles(styles, { withTheme: true })(DashBoard);

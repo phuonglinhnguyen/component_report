@@ -1,21 +1,15 @@
-import { Page404, DashboardPage, ReportPrtformancePage, CaptureMonitoringPage } from '../../views';
+import { Page404, DashboardPage } from '../../views';
 export default [
-	{
-		name: 'capture-monitoring',
-		exact: true,
-		path: '/capture_monitoring',
-		component: CaptureMonitoringPage
-	},
-	{
-		name: 'report-performance',
-		exact: true,
-		path: '/report_performance',
-		component: ReportPrtformancePage
-	},
 	{
 		name: 'home',
 		exact: true,
 		path: '/',
+		component: DashboardPage
+	},
+	{
+		name: 'dashboard',
+		exact: false,
+		path: '/dashboard',
 		component: DashboardPage
 	},
 	{

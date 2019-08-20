@@ -1,28 +1,27 @@
 export default [
-	{
-		name: 'Capture Monitoring',
-		url: '/capture_monitoring',
-		icon: 'fa fa-desktop'
-	},
-	{
-		name: 'Report Performance',
-		url: '/report_performance',
-		icon: 'fa fa-glass'
-	}
 	// {
-	// 	name: 'All',
-	// 	icon: 'icon-star',
-	// 	children: [
-	// 		{
-	// 			name: 'Capture Monitoring',
-	// 			url: '/capture_monitoring',
-	// 			icon: 'fa fa-desktop'
-	// 		},
-	// 		{
-	// 			name: 'Report Performance',
-	// 			url: '/report_performance',
-	// 			icon: 'fa fa-glass'
-	// 		}
-	// 	]
-	// }
+	// 	name: 'Capture Monitoring',
+	// 	url: '/dashboard/capture_monitoring'
+	// },
+	// {
+	// 	name: 'Report Performance',
+	// 	url: '/dashboard/report_performance'
+	// },
+	{
+		name: 'All',
+		children: [
+			{
+				name: 'Test Bpmn Viewer',
+				url: '/dashboard/test_bpmn_viewer'
+			},
+			{
+				name: 'Capture Monitoring',
+				url: '/dashboard/capture_monitoring'
+			},
+			{
+				name: 'Report Performance',
+				url: '/dashboard/report_performance'
+			},
+		]
+	}
 ];
