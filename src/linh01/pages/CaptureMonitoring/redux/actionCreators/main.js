@@ -30,4 +30,25 @@ export const getData = () => async (dispatch) => {
 		}
 	});
 };
- 
+export const setCapture = (capture: any) => async (dispatch: any) => {
+	dispatch({
+		type: types.SET_CAPTURE,
+		payload: {
+			capture
+		},
+		meta: {
+			resource: types.NAME_REDUCER
+		}
+	});
+};
+export const setSelectedCapture = (capture: any) => async (dispatch: any) => {
+	dispatch({
+		type: types.SET_SELECTED_CAPTURE,
+		payload: {
+			capture
+		},
+		meta: {
+			resource: types.NAME_REDUCER
+		}
+	});
+};

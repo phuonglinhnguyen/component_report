@@ -4,7 +4,7 @@ import { DashboardStyle } from './assets';
 import { PageDecorator, getDataObject } from '@dgtx/coreui';
 import reducer from './redux/reducers';
 import * as types from './redux/actions';
-import { getData } from './redux/actionCreators';
+import { getData, setCapture, setSelectedCapture } from './redux/actionCreators';
 import CapMonitorComponent from './components/CapMonitorComponent';
 import compose from 'recompose/compose';
 
@@ -35,10 +35,13 @@ export default compose(
 	PageDecorator({
 		resources: [ reducer ],
 		actions: {
-			getData
+			getData,
+			setCapture,
+			setSelectedCapture
 		},
 		mapState: (state) => ({
-			data: getDataObject(`resources.${types.NAME_REDUCER}.data`, state.core)
+			data: getDataObject(`resources.${types.NAME_REDUCER}.data`, state.core),
+			capture: getDataObject(`resources.${types.NAME_REDUCER}.data.capture`, state.core)
 		})
 	}),
 	withStyles(DashboardStyle, { withTheme: true })

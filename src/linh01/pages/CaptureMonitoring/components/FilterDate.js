@@ -19,6 +19,8 @@ const FilterDate = (props) => {
 		setToDateSearch,
 		fromDateSearch,
 		toDateSearch,
+		batchNameSearch,
+		setBatchNameSearch
 	} = props;
 
 
@@ -31,10 +33,12 @@ const FilterDate = (props) => {
 		const value = e.target.value;
 		setToDateSearch(value);
 	};
-
+	const onSearchBatchName = (e) => {
+		const value = e.target.value;
+		setBatchNameSearch(value);
+	};
 	return (
 		<div>
-		
 			<TextField
 				label="From"
 				name="fromDate"
@@ -56,6 +60,14 @@ const FilterDate = (props) => {
 				InputLabelProps={{
 					shrink: true
 				}}
+			/>
+			<TextField
+				label="Batch Name"
+				name="batchName"
+				type="search"
+				margin="dense"
+				onChange={onSearchBatchName}
+				value={batchNameSearch}
 			/>
 		</div>
 	);

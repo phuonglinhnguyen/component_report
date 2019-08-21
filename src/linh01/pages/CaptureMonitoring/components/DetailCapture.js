@@ -1,4 +1,5 @@
 import React from 'react';
+import { get } from 'lodash';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -11,36 +12,73 @@ import Chip from '@material-ui/core/Chip';
 import FaceIcon from '@material-ui/icons/Face';
 import Badge from '@material-ui/core/Badge';
 import { createMuiTheme, MuiThemeProvider, withStyles } from '@material-ui/core/styles';
-import { getDataClassify } from '../../../../providers/data/mockData/task';
 import Users from './Dialogs/Users';
+
 const styles: any = (theme: any) => {
 	return {
 		rowDetail: {
-			width: '20%'
+			width: '10%'
 		},
 		rowSmall: {
-			width: '10%'
+			width: '5%'
+		},
+		rowLg: {
+			width: '30%'
 		},
 		btnAssign: {
 			fontSize: '10px'
+		},
+		rowId: {
+			width: '25%'
 		}
 	};
 };
 
 const theme = createMuiTheme({
 	overrides: {
+		MuiTableCell: {
+			root: {
+				padding: '10px'
+			}
+		},
 		MuiBadge: {
 			colorPrimary: {
 				backgroundColor: '#4caf50'
+			},
+			colorSecondary: {
+				backgroundColor: 'gray'
 			}
 		}
 	}
 });
+
 const DetailCapture = (props) => {
-	const { classes } = props;
-	const data = getDataClassify();
+	const { classes, cap, choose } = props;
+
+	const chooseData = () => {
+		if (choose === 'Classify') {
+			const data = get(cap, 'classify', []);
+			return data;
+		} else if (choose === 'Omr') {
+			const data = get(cap, 'omr', []);
+			return data;
+		} else if (choose === 'Invoice Header') {
+			const data = get(cap, 'invoice_header', []);
+			return data;
+		} else if (choose === 'Invoice Item') {
+			const data = get(cap, 'invoice_item', []);
+			return data;
+		}
+	};
+
+	let data = chooseData();
 	const [ anchorEl, setAnchorEl ] = React.useState(null);
+
 	const [ selectedUser, setSelectedUser ] = React.useState(null);
+	const user = get(selectedUser, 'username', {});
+	console.log(user);
+
+	const [ chipData, setChipData ] = React.useState(null);
 	const handleClick = (event) => {
 		setAnchorEl(event.currentTarget);
 	};
@@ -48,8 +86,9 @@ const DetailCapture = (props) => {
 	const handleClose = () => {
 		setAnchorEl(null);
 	};
-	const handleDelete = () => {
-		alert('You clicked the delete icon.');
+	const handleDelete = (chip) => {
+		// setChipData((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
+		// console.log(chipData);
 	};
 
 	const open = Boolean(anchorEl);
@@ -63,20 +102,17 @@ const DetailCapture = (props) => {
 						<TableHead style={{ background: 'lightgray' }}>
 							<TableRow>
 								<TableCell className={classes.rowSmall}>No.</TableCell>
-								<TableCell align="center" className={classes.rowDetail}>
+								<TableCell align="center" className={classes.rowId}>
 									Task ID
 								</TableCell>
-								<TableCell align="center" className={classes.rowDetail}>
-									Task Name
-								</TableCell>
-								<TableCell align="center" className={classes.rowDetail}>
+								<TableCell align="center" className={classes.rowLg}>
 									File Path
 								</TableCell>
 								<TableCell align="center" className={classes.rowDetail}>
 									User
 								</TableCell>
 								<TableCell align="center" className={classes.rowDetail}>
-									Action
+									Status
 								</TableCell>
 							</TableRow>
 						</TableHead>
@@ -89,29 +125,38 @@ const DetailCapture = (props) => {
 								return (
 									<TableRow>
 										<TableCell className={classes.rowSmall}>{index + 1}</TableCell>
-										<TableCell align="center" className={classes.rowDetail}>
-											{item.taskID}
+										<TableCell align="right" className={classes.rowId}>
+											{item.task_id}
+										</TableCell>
+										<TableCell align="center" className={classes.rowLg}>
+											{item.file_path}
 										</TableCell>
 										<TableCell align="center" className={classes.rowDetail}>
-											{item.task_name}
+											{item.username === '' ? (
+												<Button
+													aria-describedby={id}
+													className={classes.btnAssign}
+													variant="contained"
+													onClick={handleClick}
+												>
+													Assign
+												</Button>
+											) : (
+												<Chip
+													icon={<FaceIcon />}
+													label={item.username}
+													onDelete={(chip) => {
+														setSelectedUser(item);
+														handleDelete(chip);
+													}}
+													className={classes.chip}
+												/>
+											)}
 										</TableCell>
 										<TableCell align="center" className={classes.rowDetail}>
-											P:/119_161116_002_505208/Images/0050_20190604
-										</TableCell>
-										<TableCell align="center" className={classes.rowDetail}>
-											<Badge color="primary" variant="dot">
-												<Chip icon={<FaceIcon />} label={item.user} onDelete={handleDelete} className={classes.chip} />
+											<Badge color={item.status === 'Online' ? 'primary' : 'secondary'} variant="dot">
+												{item.status}
 											</Badge>
-										</TableCell>
-										<TableCell align="center" className={classes.rowDetail}>
-											<Button
-												aria-describedby={id}
-												className={classes.btnAssign}
-												variant="contained"
-												onClick={handleClick}
-											>
-												Assign
-											</Button>
 										</TableCell>
 									</TableRow>
 								);

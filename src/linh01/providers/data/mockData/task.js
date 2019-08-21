@@ -1,27 +1,27 @@
 export const getDataClassify = () => {
 	return [
 		{
-			taskID: '123',
+			taskID: '123dsds',
 			task_name: 'classify',
 			file_path: 'P:/119_161116_002_505208/Images/0050_20190604',
 			user: 'linhnp',
-			active: true,
+			status: 'Online',
 			assign: false
 		},
 		{
-			taskID: '122',
+			taskID: '122dewdsd',
 			task_name: 'classify',
 			file_path: 'P:/119_161116_002_505208/Images/0050_20190604',
 			user: 'linhnp',
-			active: true,
+			status: 'Online',
 			assign: false
 		},
 		{
-			taskID: '121',
+			taskID: '121sdasdads',
 			task_name: 'classify',
 			file_path: 'P:/119_161116_002_505208/Images/0050_20190604',
 			user: 'quanvt',
-			active: false,
+			status: 'Offline',
 			assign: false
 		}
 	];

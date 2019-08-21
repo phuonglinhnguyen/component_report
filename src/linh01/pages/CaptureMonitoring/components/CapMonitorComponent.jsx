@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { get } from 'lodash';
+import { get, filter } from 'lodash';
 import moment from 'moment';
 import { createMuiTheme, MuiThemeProvider, withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -10,9 +10,13 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import TablePagination from '@material-ui/core/TablePagination';
 import Button from '@material-ui/core/Button';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import FilterDate from './FilterDate';
+import IconButton from '@material-ui/core/IconButton';
 import ViewWorkflowDialog from './Dialogs/ViewWorkflowDialog';
 import DetailDialog from './Dialogs/DetailDialog';
+import ExportXLSX from './ExportXLSX';
+
 const styles: any = (theme: any) => {
 	return {
 		rowSmall: {
@@ -31,7 +35,9 @@ const styles: any = (theme: any) => {
 			width: '30px'
 		},
 		filter: {
-			paddingLeft: '20px'
+			display: 'flex',
+			paddingLeft: '20px',
+			justifyContent: 'space-between'
 		},
 		assCursor: {
 			width: '30px',
@@ -59,14 +65,19 @@ const theme = createMuiTheme({
 
 const CapMonitorComponent = (props) => {
 	const { classes, data } = props;
-	const captureMonitors = get(data, 'data', []);
 
+	const captureMonitors = get(data, 'data', []);
 	const [ page, setPage ] = useState(0);
 	const [ rowsPerPage, setRowsPerPage ] = useState(25);
 	const [ fromDateSearch, setFromDateSearch ] = useState('');
 	const [ toDateSearch, setToDateSearch ] = useState('');
+	const [ batchNameSearch, setBatchNameSearch ] = useState('');
 	const [ openViewWf, setOpenViewWf ] = React.useState(false);
-	const [ openViewDetail, setOpenViewDetail ] = React.useState(false);
+	const [ openViewDetail, setOpenViewDetail ] = useState(false);
+	const [ selectedCapture, setSelectedCapture ] = useState(null);
+	const [ choose, setChoose ] = useState('');
+	const [ role, setRole ] = useState('');
+
 	//==Rows Per Page
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
@@ -93,11 +104,29 @@ const CapMonitorComponent = (props) => {
 		});
 	};
 
+	const filterData = (data, field, strSearch) => {
+		const strSearchLowercase = strSearch ? String(strSearch).toLowerCase() : '';
+		return filter(data, (item) => {
+			const fieldTextLowercase = item[field] ? String(item[field]).toLowerCase() : '';
+			if (!fieldTextLowercase) return false;
+			return fieldTextLowercase.indexOf(strSearchLowercase) + 1;
+		});
+	};
+
 	const start = fromDateSearch.replace(/-/gi, '');
 	const end = toDateSearch.replace(/-/gi, '');
 
 	let dateToDateFilteredData = captureMonitors;
 	dateToDateFilteredData = filterDatetime(captureMonitors, start, end);
+
+	let batchNameData = dateToDateFilteredData;
+	if (batchNameSearch) {
+		batchNameData = filterData(dateToDateFilteredData, 'batch_name', batchNameSearch);
+	}
+
+	const onRefresh = () => {
+		console.log('ahihi chua load');
+	};
 
 	return (
 		<div className={classes.report}>
@@ -108,7 +137,15 @@ const CapMonitorComponent = (props) => {
 						setFromDateSearch={setFromDateSearch}
 						toDateSearch={toDateSearch}
 						setToDateSearch={setToDateSearch}
+						batchNameSearch={batchNameSearch}
+						setBatchNameSearch={setBatchNameSearch}
 					/>
+					<div>
+						<IconButton aria-label="Refresh" onClick={onRefresh}>
+							<RefreshIcon />
+						</IconButton>
+						<ExportXLSX batchNameData={batchNameData} />
+					</div>
 				</div>
 				<Paper style={{ overflow: 'auto' }}>
 					<Table>
@@ -176,7 +213,7 @@ const CapMonitorComponent = (props) => {
 				<Paper style={{ overflow: 'auto', height: '675px' }}>
 					<Table style={{ tableLayout: 'fixed' }}>
 						<TableBody>
-							{dateToDateFilteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((cap, index) => {
+							{batchNameData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((cap, index) => {
 								return (
 									<TableRow>
 										<TableCell style={{ width: '20px' }}>{index + 1}</TableCell>
@@ -198,17 +235,53 @@ const CapMonitorComponent = (props) => {
 										<TableCell align="right" className={classes.ass}>
 											{cap.imported_amount}
 										</TableCell>
-										<TableCell align="right" className={classes.assCursor} onClick={() => setOpenViewDetail(true)}>
-											{cap.classify}
+										<TableCell
+											align="right"
+											className={classes.assCursor}
+											onClick={() => {
+												setOpenViewDetail(true);
+												setSelectedCapture(cap);
+												setRole('PM');
+												setChoose('Classify');
+											}}
+										>
+											{cap.classify.length}
 										</TableCell>
-										<TableCell align="right" className={classes.assCursor}>
-											{cap.omr}
+										<TableCell
+											align="right"
+											className={classes.assCursor}
+											onClick={() => {
+												setOpenViewDetail(true);
+												setSelectedCapture(cap);
+												setRole('PM');
+												setChoose('Omr');
+											}}
+										>
+											{cap.omr.length}
 										</TableCell>
-										<TableCell align="right" className={classes.assCursor}>
-											{cap.invoice_header}
+										<TableCell
+											align="right"
+											className={classes.assCursor}
+											onClick={() => {
+												setOpenViewDetail(true);
+												setSelectedCapture(cap);
+												setRole('PM');
+												setChoose('Invoice Header');
+											}}
+										>
+											{cap.invoice_header.length}
 										</TableCell>
-										<TableCell align="right" className={classes.assCursor}>
-											{cap.invoice_item}
+										<TableCell
+											align="right"
+											className={classes.assCursor}
+											onClick={() => {
+												setOpenViewDetail(true);
+												setSelectedCapture(cap);
+												setRole('PM');
+												setChoose('Invoice Item');
+											}}
+										>
+											{cap.invoice_item.length}
 										</TableCell>
 										<TableCell align="right" className={classes.assCursor}>
 											{cap.verify}
@@ -231,8 +304,17 @@ const CapMonitorComponent = (props) => {
 										<TableCell align="right" className={classes.assCursor}>
 											{cap.available_export}
 										</TableCell>
-										<TableCell className={classes.ass} align="right">
-											{cap.finished_export}
+										<TableCell
+											className={classes.assCursor}
+											align="right"
+											onClick={() => {
+												setOpenViewDetail(true);
+												setSelectedCapture(cap);
+												setChoose('Finished Export');
+												setRole('QC');
+											}}
+										>
+											{cap.finished_export.length}
 										</TableCell>
 										<TableCell className={classes.ass} align="right">
 											{cap.export_date}
@@ -264,7 +346,16 @@ const CapMonitorComponent = (props) => {
 					onChangeRowsPerPage={handleChangeRowsPerPage}
 				/>
 				<ViewWorkflowDialog open={openViewWf} setOpen={setOpenViewWf} />
-				<DetailDialog open={openViewDetail} setOpen={setOpenViewDetail} />
+				<DetailDialog
+					open={openViewDetail}
+					setOpen={setOpenViewDetail}
+					captureMonitors={captureMonitors}
+					cap={selectedCapture}
+					setCap={setSelectedCapture}
+					choose={choose}
+					role={role}
+					{...props}
+				/>
 			</MuiThemeProvider>
 		</div>
 	);
