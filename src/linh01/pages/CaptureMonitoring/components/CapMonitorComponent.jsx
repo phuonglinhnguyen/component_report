@@ -245,7 +245,7 @@ const CapMonitorComponent = (props) => {
 												setChoose('Classify');
 											}}
 										>
-											{cap.classify.length}
+											{cap.classify.total}
 										</TableCell>
 										<TableCell
 											align="right"
@@ -257,7 +257,7 @@ const CapMonitorComponent = (props) => {
 												setChoose('Omr');
 											}}
 										>
-											{cap.omr.length}
+											{cap.omr.total}
 										</TableCell>
 										<TableCell
 											align="right"
@@ -269,7 +269,7 @@ const CapMonitorComponent = (props) => {
 												setChoose('Invoice Header');
 											}}
 										>
-											{cap.invoice_header.length}
+											{cap.invoice_header.total}
 										</TableCell>
 										<TableCell
 											align="right"
@@ -281,7 +281,7 @@ const CapMonitorComponent = (props) => {
 												setChoose('Invoice Item');
 											}}
 										>
-											{cap.invoice_item.length}
+											{cap.invoice_item.total}
 										</TableCell>
 										<TableCell align="right" className={classes.assCursor}>
 											{cap.verify}

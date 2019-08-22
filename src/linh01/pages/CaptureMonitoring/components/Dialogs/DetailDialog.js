@@ -1,4 +1,5 @@
 import React from 'react';
+import { get } from 'lodash';
 import { createMuiTheme, MuiThemeProvider, withStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -7,6 +8,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import DetailCapture from './../DetailCapture';
 import DetailQC from './../DetailQC';
+import moment from 'moment';
 
 const styles: any = (theme: any) => {
 	return {
@@ -27,7 +29,7 @@ const theme = createMuiTheme({
 		},
 		MuiDialogContent: {
 			root: {
-				width: '1000px',
+				width: '1000px'
 			}
 		}
 	}
@@ -35,13 +37,15 @@ const theme = createMuiTheme({
 
 const DetailDialog = (props) => {
 	const { classes, open, setOpen, cap, choose, role } = props;
-
+	const created_time = get(cap, 'created_date', {});
+	let tam = moment(created_time);
+	const date = tam._d;
 	return (
 		<MuiThemeProvider theme={theme}>
 			<Dialog open={open} onClose={() => setOpen(false)}>
 				<div className={classes.title}>
 					<DialogTitle id="alert-dialog-title">{'Detail task ' + choose}</DialogTitle>
-					<div style={{ paddingRight: '25px', color: 'gray' }}>2019-06-03T04:42:05.107+0000 </div>
+					<div style={{ paddingRight: '25px', color: 'gray' }}>{created_time}</div>
 				</div>
 
 				<DialogContent>

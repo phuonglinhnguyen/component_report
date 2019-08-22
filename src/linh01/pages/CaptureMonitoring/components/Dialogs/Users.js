@@ -9,32 +9,49 @@ import { createMuiTheme, MuiThemeProvider, withStyles } from '@material-ui/core/
 import { getDataUsers } from '../../../../../providers/data/mockData/task';
 const styles: any = (theme: any) => {
 	return {
-    selectedList:{
-      '&:hover': {
+		selectedList: {
+			'&:hover': {
 				cursor: 'pointer',
-				background: '#3c4858',
-				
+				background: '#3c4858'
 			}
-    },
-    text:{
-      '&:hover':{
-        color: 'white'
-      }
-    }
-  };
+		},
+		text: {
+			'&:hover': {
+				color: 'white'
+			}
+		}
+	};
 };
 
 const theme = createMuiTheme({
 	overrides: {}
 });
 const Users = (props) => {
-	const { classes,selectedUser,setelectedUser } = props;
+	const { classes, items, setItems, setAnchorEl } = props;
 	const users = getDataUsers();
+	const onChooseUser = (user) => {
+		const newItems = items.map((item) => {
+			if (item.username === '') {
+				item.username = user.username;
+				return item;
+			}
+			return item;
+		});
+		setItems(newItems);
+		setAnchorEl(null);
+	};
+
 	return (
 		<List className={classes.root}>
 			{users.map((user, index) => {
 				return (
-					<ListItem key={index} className={classes.selectedList}>
+					<ListItem
+						key={index}
+						className={classes.selectedList}
+						onClick={() => {
+							onChooseUser(user);
+						}}
+					>
 						<ListItemAvatar>
 							<Avatar>
 								<ImageIcon />

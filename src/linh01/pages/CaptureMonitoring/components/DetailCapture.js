@@ -1,5 +1,5 @@
 import React from 'react';
-import { get } from 'lodash';
+import { get, filter } from 'lodash';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -57,40 +57,43 @@ const DetailCapture = (props) => {
 
 	const chooseData = () => {
 		if (choose === 'Classify') {
-			const data = get(cap, 'classify', []);
+			const data = get(cap, 'classify.items', []);
 			return data;
 		} else if (choose === 'Omr') {
-			const data = get(cap, 'omr', []);
+			const data = get(cap, 'omr.items', []);
 			return data;
 		} else if (choose === 'Invoice Header') {
-			const data = get(cap, 'invoice_header', []);
+			const data = get(cap, 'invoice_header.items', []);
 			return data;
 		} else if (choose === 'Invoice Item') {
-			const data = get(cap, 'invoice_item', []);
+			const data = get(cap, 'invoice_item.items', []);
 			return data;
 		}
 	};
 
-	let data = chooseData();
+	const [ items, setItems ] = React.useState(() => {
+		return chooseData();
+	});
+
 	const [ anchorEl, setAnchorEl ] = React.useState(null);
 
-	const [ selectedUser, setSelectedUser ] = React.useState(null);
-	const user = get(selectedUser, 'username', {});
-	console.log(user);
+	const handleDelete = (task_id) => {
+		const newItems = items.map((item) => {
+			if (item.task_id === task_id) {
+				item.username = '';
+				return item;
+			}
+			return item;
+		});
+		setItems(newItems);
+	};
 
-	const [ chipData, setChipData ] = React.useState(null);
 	const handleClick = (event) => {
 		setAnchorEl(event.currentTarget);
 	};
-
 	const handleClose = () => {
 		setAnchorEl(null);
 	};
-	const handleDelete = (chip) => {
-		// setChipData((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
-		// console.log(chipData);
-	};
-
 	const open = Boolean(anchorEl);
 	const id = open ? 'simple-popover' : undefined;
 
@@ -121,7 +124,7 @@ const DetailCapture = (props) => {
 				<Paper style={{ overflow: 'auto', height: '300px' }}>
 					<Table style={{ tableLayout: 'fixed' }}>
 						<TableBody>
-							{data.map((item, index) => {
+							{items.map((item, index) => {
 								return (
 									<TableRow>
 										<TableCell className={classes.rowSmall}>{index + 1}</TableCell>
@@ -145,13 +148,28 @@ const DetailCapture = (props) => {
 												<Chip
 													icon={<FaceIcon />}
 													label={item.username}
-													onDelete={(chip) => {
-														setSelectedUser(item);
-														handleDelete(chip);
+													onDelete={() => {
+														handleDelete(item.task_id);
 													}}
 													className={classes.chip}
 												/>
 											)}
+											<Popover
+												id={id}
+												open={open}
+												anchorEl={anchorEl}
+												onClose={handleClose}
+												anchorOrigin={{
+													vertical: 'bottom',
+													horizontal: 'center'
+												}}
+												transformOrigin={{
+													vertical: 'top',
+													horizontal: 'center'
+												}}
+											>
+												<Users items={items} setItems={setItems} setAnchorEl={setAnchorEl} />
+											</Popover>
 										</TableCell>
 										<TableCell align="center" className={classes.rowDetail}>
 											<Badge color={item.status === 'Online' ? 'primary' : 'secondary'} variant="dot">
@@ -164,22 +182,6 @@ const DetailCapture = (props) => {
 						</TableBody>
 					</Table>
 				</Paper>
-				<Popover
-					id={id}
-					open={open}
-					anchorEl={anchorEl}
-					onClose={handleClose}
-					anchorOrigin={{
-						vertical: 'bottom',
-						horizontal: 'center'
-					}}
-					transformOrigin={{
-						vertical: 'top',
-						horizontal: 'center'
-					}}
-				>
-					<Users selectedUser={selectedUser} setSelectedUser={setSelectedUser} />
-				</Popover>
 			</MuiThemeProvider>
 		</div>
 	);
