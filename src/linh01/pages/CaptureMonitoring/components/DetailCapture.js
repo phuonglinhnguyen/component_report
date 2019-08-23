@@ -1,5 +1,7 @@
-import React from 'react';
-import { get, filter } from 'lodash';
+import React, { useState } from 'react';
+import { get } from 'lodash';
+import { createMuiTheme, MuiThemeProvider, withStyles } from '@material-ui/core/styles';
+
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -11,8 +13,9 @@ import Popover from '@material-ui/core/Popover';
 import Chip from '@material-ui/core/Chip';
 import FaceIcon from '@material-ui/icons/Face';
 import Badge from '@material-ui/core/Badge';
-import { createMuiTheme, MuiThemeProvider, withStyles } from '@material-ui/core/styles';
+import TablePagination from '@material-ui/core/TablePagination';
 import Users from './Dialogs/Users';
+import ConfirmDialog from './Dialogs/ConfirmDialog';
 
 const styles: any = (theme: any) => {
 	return {
@@ -54,7 +57,6 @@ const theme = createMuiTheme({
 
 const DetailCapture = (props) => {
 	const { classes, cap, choose } = props;
-
 	const chooseData = () => {
 		if (choose === 'Classify') {
 			const data = get(cap, 'classify.items', []);
@@ -71,31 +73,25 @@ const DetailCapture = (props) => {
 		}
 	};
 
-	const [ items, setItems ] = React.useState(() => {
+	const [ items, setItems ] = useState(() => {
 		return chooseData();
 	});
-
-	const [ anchorEl, setAnchorEl ] = React.useState(null);
-
-	const handleDelete = (task_id) => {
-		const newItems = items.map((item) => {
-			if (item.task_id === task_id) {
-				item.username = '';
-				return item;
-			}
-			return item;
-		});
-		setItems(newItems);
-	};
-
-	const handleClick = (event) => {
-		setAnchorEl(event.currentTarget);
-	};
-	const handleClose = () => {
-		setAnchorEl(null);
-	};
+	const [ anchorEl, setAnchorEl ] = useState(null);
+	const [ isOpenConfirm, setIsOpenConfirm ] = useState(false);
+	const [ itemDel, setItemDel ] = useState(null);
+	const [ userDel, setUserDel ] = useState(null);
 	const open = Boolean(anchorEl);
 	const id = open ? 'simple-popover' : undefined;
+	const [ page, setPage ] = useState(0);
+	const [ rowsPerPage, setRowsPerPage ] = useState(5);
+	//==Rows Per Page
+	const handleChangePage = (event, newPage) => {
+		setPage(newPage);
+	};
+
+	const handleChangeRowsPerPage = (event) => {
+		setRowsPerPage(event.target.value);
+	};
 
 	return (
 		<div>
@@ -124,7 +120,7 @@ const DetailCapture = (props) => {
 				<Paper style={{ overflow: 'auto', height: '300px' }}>
 					<Table style={{ tableLayout: 'fixed' }}>
 						<TableBody>
-							{items.map((item, index) => {
+							{items.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, index) => {
 								return (
 									<TableRow>
 										<TableCell className={classes.rowSmall}>{index + 1}</TableCell>
@@ -140,7 +136,9 @@ const DetailCapture = (props) => {
 													aria-describedby={id}
 													className={classes.btnAssign}
 													variant="contained"
-													onClick={handleClick}
+													onClick={(e) => {
+														setAnchorEl(e.currentTarget);
+													}}
 												>
 													Assign
 												</Button>
@@ -149,16 +147,26 @@ const DetailCapture = (props) => {
 													icon={<FaceIcon />}
 													label={item.username}
 													onDelete={() => {
-														handleDelete(item.task_id);
+														setItemDel(item.task_id);
+														setUserDel(item.username);
+														setIsOpenConfirm(true);
 													}}
 													className={classes.chip}
 												/>
 											)}
+											<ConfirmDialog
+												userDel={userDel}
+												itemDel={itemDel}
+												items={items}
+												setItems={setItems}
+												isOpen={isOpenConfirm}
+												setIsOpen={setIsOpenConfirm}
+											/>
 											<Popover
 												id={id}
 												open={open}
 												anchorEl={anchorEl}
-												onClose={handleClose}
+												onClose={() => setAnchorEl(null)}
 												anchorOrigin={{
 													vertical: 'bottom',
 													horizontal: 'center'
@@ -182,6 +190,21 @@ const DetailCapture = (props) => {
 						</TableBody>
 					</Table>
 				</Paper>
+				<TablePagination
+					rowsPerPageOptions={[ 5, 10, 25 ]}
+					component="div"
+					count={items.length}
+					rowsPerPage={rowsPerPage}
+					page={page}
+					backIconButtonProps={{
+						'aria-label': 'Previous Page'
+					}}
+					nextIconButtonProps={{
+						'aria-label': 'Next Page'
+					}}
+					onChangePage={handleChangePage}
+					onChangeRowsPerPage={handleChangeRowsPerPage}
+				/>
 			</MuiThemeProvider>
 		</div>
 	);

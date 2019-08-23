@@ -6,7 +6,7 @@ import { Translate } from 'react-redux-i18n';
 import { PageDecorator, getDataObject, redirectApp } from '@dgtx/coreui';
 import reducer from './redux/reducers';
 import * as types from './redux/actions';
-import { onTest } from './redux/actionCreators';
+import { onTest, getData } from './redux/actionCreators';
 import compose from 'recompose/compose';
 import DashBoard from './components/DashBoard';
 export interface LayoutDefautProps {
@@ -23,9 +23,14 @@ class Dashboard extends React.Component<LayoutDefautProps, any> {
 	handleConnectCaptureMonitoring = () => {
 		redirectApp('/capture_monitoring');
 	};
+	componentWillMount = () => {
+		const { getData, match } = this.props;
+		const projectId = getDataObject('params.projectid', match);
+		getData(projectId);
+	};
 
 	render() {
-		const { classes, test, onTest } = this.props;
+		const { classes, test, onTest,match } = this.props;
 		const keyTranslate = types.KEY_TRANSLATE;
 		return (
 			<div className={classes.root}>
@@ -36,7 +41,7 @@ class Dashboard extends React.Component<LayoutDefautProps, any> {
 				</div>
 				<Button onClick={this.handleConnectReportPerformance}>REPORT PERFORMANCE</Button>
 				<Button onClick={this.handleConnectCaptureMonitoring}>CAPTURE MONITORING</Button> */}
-        <DashBoard />
+				<DashBoard {...this.props}/>
 			</div>
 		);
 	}
@@ -45,10 +50,12 @@ export default compose(
 	PageDecorator({
 		resources: [ reducer ],
 		actions: {
-			onTest
+			onTest,
+			getData
 		},
 		mapState: (state) => ({
-			test: getDataObject(`resources.${types.NAME_REDUCER}.data.test`, state.core) || false
+			test: getDataObject(`resources.${types.NAME_REDUCER}.data.test`, state.core) || false,
+			users: getDataObject(`resources.${types.NAME_REDUCER}.data.users`, state.core) || false
 		})
 	}),
 	withStyles(DashboardStyle, { withTheme: true })

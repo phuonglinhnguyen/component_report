@@ -2,3 +2,4 @@
 export const KEY_TRANSLATE = 'dashboard';
 export const NAME_REDUCER = 'dashboard';
 export const TEST_CONNECT_REDUCER = '$DGS/TEST_CONNECT_REDUCER';
+export const GET_DATA_USERS = '$DGS/GET_DATA_USERS';

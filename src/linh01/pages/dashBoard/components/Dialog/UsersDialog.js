@@ -6,10 +6,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
-import DetailCapture from './../DetailCapture';
-import DetailQC from './../DetailQC';
-import moment from 'moment';
-
+import DetailTotalUsers from './../DetailTotalUsers';
 const styles: any = (theme: any) => {
 	return {
 		title: {
@@ -35,23 +32,18 @@ const theme = createMuiTheme({
 	}
 });
 
-const DetailDialog = (props) => {
-	const { classes, open, setOpen, cap, choose, role } = props;
-	const created_time = get(cap, 'created_date', {});
-	let tam = moment(created_time);
-	let date = tam._d;
-	console.log(date);
+const UsersDialog = (props) => {
+	const { classes, open, setOpen, users } = props;
 
 	return (
 		<MuiThemeProvider theme={theme}>
 			<Dialog open={open} onClose={() => setOpen(false)}>
 				<div className={classes.title}>
-					<DialogTitle id="alert-dialog-title">{'Detail task ' + choose}</DialogTitle>
-					<div style={{ paddingRight: '25px', color: 'gray' }}>{created_time}</div>
+					<DialogTitle id="alert-dialog-title">{'Detail total users'}</DialogTitle>
 				</div>
 
 				<DialogContent>
-					{role === 'QC' ? <DetailQC cap={cap} choose={choose} /> : <DetailCapture cap={cap} choose={choose} />}
+					<DetailTotalUsers users={users} />
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={() => setOpen(false)} color="primary" autoFocus>
@@ -62,4 +54,4 @@ const DetailDialog = (props) => {
 		</MuiThemeProvider>
 	);
 };
-export default withStyles(styles, { withTheme: true })(DetailDialog);
+export default withStyles(styles, { withTheme: true })(UsersDialog);
