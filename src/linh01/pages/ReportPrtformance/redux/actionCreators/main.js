@@ -1,7 +1,7 @@
 import * as types from '../actions';
 import { getDataObject } from '@dgtx/coreui';
 import { cloneDeep } from 'lodash';
-import {getDataReport} from '../../../../../providers/data/mockData/report_mockdata'
+import { getDataReport } from '../../../../../providers/data/mockData/report_mockdata';
 
 export const onTest = () => async (dispatch, getState) => {
 	const state = getDataObject(`core.resources.${types.NAME_REDUCER}.data`, cloneDeep(getState()));
@@ -18,16 +18,15 @@ export const onTest = () => async (dispatch, getState) => {
 };
 
 export const getData = () => async (dispatch) => {
-  const data = getDataReport();
-  
+	const data = getDataReport();
+
 	dispatch({
 		type: types.GET_LIST_DATA_REPORT,
 		payload: {
-			data:data
+			data: data
 		},
 		meta: {
 			resource: types.NAME_REDUCER
 		}
 	});
 };
- 

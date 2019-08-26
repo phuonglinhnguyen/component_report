@@ -27,12 +27,12 @@ const theme = createMuiTheme({
 	overrides: {}
 });
 const Users = (props) => {
-	const { classes, items, setItems, setAnchorEl } = props;
+	const { classes, items, setItems, setAnchorEl, selectedAssign } = props;
 	const users = getDataUsers();
 	const onChooseUser = (user) => {
 		const newItems = items.map((item) => {
-			if (item.username === '') {
-				item.username = user.username;
+			if (selectedAssign.username === '') {
+				selectedAssign.username = user.username;
 				return item;
 			}
 			return item;

@@ -80,6 +80,7 @@ const DetailCapture = (props) => {
 	const [ isOpenConfirm, setIsOpenConfirm ] = useState(false);
 	const [ itemDel, setItemDel ] = useState(null);
 	const [ userDel, setUserDel ] = useState(null);
+	const [ selectedAssign, setSelectedAssign ] = useState(null);
 	const open = Boolean(anchorEl);
 	const id = open ? 'simple-popover' : undefined;
 	const [ page, setPage ] = useState(0);
@@ -138,6 +139,7 @@ const DetailCapture = (props) => {
 													variant="contained"
 													onClick={(e) => {
 														setAnchorEl(e.currentTarget);
+														setSelectedAssign(item);
 													}}
 												>
 													Assign
@@ -176,7 +178,7 @@ const DetailCapture = (props) => {
 													horizontal: 'center'
 												}}
 											>
-												<Users items={items} setItems={setItems} setAnchorEl={setAnchorEl} />
+												<Users items={items} selectedAssign={selectedAssign} setItems={setItems} setAnchorEl={setAnchorEl} />
 											</Popover>
 										</TableCell>
 										<TableCell align="center" className={classes.rowDetail}>

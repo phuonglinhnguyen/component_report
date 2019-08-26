@@ -32,7 +32,7 @@ const theme_override = createMuiTheme({
 	overrides: {
 		MuiDrawer: {
 			paper: {
-				height: '858px',
+				height: '854px',
 				top: 'none'
 			}
 		},
@@ -195,7 +195,9 @@ const DetailUser = (props) => {
 };
 
 const DashBoard = (props) => {
-	const { classes, theme } = props;
+	console.log(props);
+	
+	const { classes, theme, user_assign, users: test } = props;
 	const [ open, setOpen ] = useState(false);
 	const [ openUser, setOpenUser ] = useState(false);
 	const [ openList, setOpenList ] = useState(false);
@@ -204,6 +206,9 @@ const DashBoard = (props) => {
 	const toggleUser = () => {
 		openUser ? setOpenUser(false) : setOpenUser(true);
 	};
+	const testAPI = user_assign;
+	console.log({ user_assign });
+	console.log(test);
 
 	const [ anchorEl, setAnchorEl ] = useState(null);
 

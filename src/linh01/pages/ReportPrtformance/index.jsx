@@ -17,13 +17,12 @@ export interface LayoutDefautProps {
 
 class ReportPrtformance extends React.Component<LayoutDefautProps, any> {
 	componentWillMount = () => {
-		const { getData, data } = this.props;
-		getData(data);
+		const { getData } = this.props;
+		getData();
 	};
 
 	render() {
-		const { classes } = this.props;
-
+		const { classes} = this.props;
 		return (
 			<div className={classes.root}>
 				<ReportComponent {...this.props} />

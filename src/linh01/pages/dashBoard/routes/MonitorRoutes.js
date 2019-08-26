@@ -1,12 +1,4 @@
 export default [
-	// {
-	// 	name: 'Capture Monitoring',
-	// 	url: '/dashboard/capture_monitoring'
-	// },
-	// {
-	// 	name: 'Report Performance',
-	// 	url: '/dashboard/report_performance'
-	// },
 	{
 		name: 'All',
 		children: [
