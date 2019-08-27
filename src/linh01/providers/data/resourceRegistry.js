@@ -1,6 +1,8 @@
 import {
   notificationDataProvider,
-  change_password
+  change_password,
+  user_onlines,
+  user_assign,
   // routes
   // group,
   // users,
@@ -9,7 +11,9 @@ import {
 } from "./resources";
 export default {
   notification: notificationDataProvider,
-  change_password
+  change_password,
+  user_onlines,
+  user_assign
   // routes
   // group,
   // users,

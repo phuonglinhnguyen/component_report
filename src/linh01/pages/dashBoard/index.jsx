@@ -18,14 +18,13 @@ export interface LayoutDefautProps {
 class Dashboard extends React.Component<LayoutDefautProps, any> {
 	componentWillMount = () => {
 		const { getDataUserOnline, getDataUsersAPI, getDataUsersAssignAPI } = this.props;
-		getDataUserOnline();
-		getDataUsersAPI();
-		getDataUsersAssignAPI();
+		// getDataUserOnline();
+		// getDataUsersAPI();
+		// getDataUsersAssignAPI();
 	};
 
 	render() {
 		const { classes } = this.props;
-		
 		return (
 			<div className={classes.root}>
 				<DashBoard {...this.props} />
@@ -37,15 +36,15 @@ export default compose(
 	PageDecorator({
 		resources: [ reducer ],
 		actions: {
-			getDataUserOnline,
-			getDataUsersAPI,
-			getDataUsersAssignAPI,
-			setUsersAssign
+			// getDataUserOnline,
+			// getDataUsersAPI,
+			// getDataUsersAssignAPI,
+			// setUsersAssign
 		},
 		mapState: (state) => ({
-			users: getDataObject(`resources.${types.NAME_REDUCER}.users`, state.core),
-			user_assign: getDataObject(`resources.${types.NAME_REDUCER}.user_assign`, state.core),
-			user_online: getDataObject(`resources.${types.NAME_REDUCER}.user_online`, state.core),
+			// users: getDataObject(`resources.${types.NAME_REDUCER}.data.users`, state.core),
+			// user_assign: getDataObject(`resources.${types.NAME_REDUCER}.data.user_assign`, state.core),
+			// user_online: getDataObject(`resources.${types.NAME_REDUCER}.data.user_online`, state.core)
 		})
 	}),
 	withStyles(DashboardStyle, { withTheme: true })

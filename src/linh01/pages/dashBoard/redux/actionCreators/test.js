@@ -1,6 +1,5 @@
 import * as types from '../actions';
 import { callAPIGetData, callAPIGetDataUsers, callAPIGetDataUsersAssign } from './call_api';
-
 export const getDataUserOnline = () => async (dispatch) => {
 	const user_online = await dispatch(callAPIGetData());
 	console.log(user_online);
@@ -31,6 +30,8 @@ export const getDataUsersAPI = () => async (dispatch) => {
 
 export const getDataUsersAssignAPI = () => async (dispatch) => {
 	const user_assign = await dispatch(callAPIGetDataUsersAssign());
+	console.log({ user_assign });
+
 	dispatch({
 		type: types.GET_DATA_USERS_ASSIGN,
 		payload: {

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { BrowserRouter, Route, Link, Switch } from 'react-router-dom';
 import classNames from 'classnames';
 import { withStyles, createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
-import Fab from '@material-ui/core/Fab';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -15,18 +14,18 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListIcon from '@material-ui/icons/List';
 import ListItem from '@material-ui/core/ListItem';
-import Collapse from '@material-ui/core/Collapse';
 import Paper from '@material-ui/core/Paper';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
 import Users from '@material-ui/icons/PermIdentity';
 import MonitorRoutes from '../routes/MonitorRoutes';
+import { getProjects } from '../../../../providers/data/mockData/projects';
+import { getGroupProjects } from '../../../../providers/data/mockData/group_project';
 import dashboardRoutes from '../routes/dashboardRoutes';
 import { getDataUsers } from '../../../../providers/data/mockData/task';
 import Popper from '@material-ui/core/Popper';
 import { Button } from '@material-ui/core';
 import UsersDialog from './Dialog/UsersDialog';
-const drawerWidth = 240;
+import GroupProject from './GroupProject';
+const drawerWidth = 300;
 
 const theme_override = createMuiTheme({
 	overrides: {
@@ -166,6 +165,7 @@ const styles = (theme) => ({
 
 const DetailUser = (props) => {
 	const { user } = props;
+
 	return (
 		<div style={{ width: '300px' }}>
 			<Paper>
@@ -195,20 +195,17 @@ const DetailUser = (props) => {
 };
 
 const DashBoard = (props) => {
-	console.log(props);
-	
-	const { classes, theme, user_assign, users: test } = props;
+	const { classes, theme } = props;
 	const [ open, setOpen ] = useState(false);
 	const [ openUser, setOpenUser ] = useState(false);
 	const [ openList, setOpenList ] = useState(false);
 	const [ openTotalUser, setOpenTotalUser ] = useState(false);
+	const projects = getProjects();
+	const groupProjects = getGroupProjects();
 	const users = getDataUsers();
 	const toggleUser = () => {
 		openUser ? setOpenUser(false) : setOpenUser(true);
 	};
-	const testAPI = user_assign;
-	console.log({ user_assign });
-	console.log(test);
 
 	const [ anchorEl, setAnchorEl ] = useState(null);
 
@@ -264,8 +261,9 @@ const DashBoard = (props) => {
 							</IconButton>
 						</div>
 						<Divider />
-						<List>
-							{MonitorRoutes.map((item, index) => {
+						<GroupProject />
+						{/* <List>
+							{groupProjects.map((item, index) => {
 								return (
 									<div>
 										<ListItem
@@ -281,7 +279,7 @@ const DashBoard = (props) => {
 										</ListItem>
 										<Collapse in={openList} timeout="auto" unmountOnExit>
 											<List component="div" disablePadding>
-												{item.children.map((ex, i) => {
+												{item.childs.map((ex, i) => {
 													return (
 														<ListItem button className={classes.nested}>
 															<Link to={ex.url} key={i} className={classes.itemLink}>
@@ -295,7 +293,7 @@ const DashBoard = (props) => {
 									</div>
 								);
 							})}
-						</List>
+						</List> */}
 					</Drawer>
 					<Drawer
 						className={classes.drawerUser}
@@ -322,7 +320,7 @@ const DashBoard = (props) => {
 										<div className={classes.listUser} onMouseEnter={hoverUser} onMouseLeave={hoverUser}>
 											<ListItem>{user.username}</ListItem>
 
-											<span className={user.status === 'Online' ? classes.dotOnline : classes.dotOffline} />
+											{/* <span className={user.status === 'Online' ? classes.dotOnline : classes.dotOffline} /> */}
 										</div>
 										<Popper id={id} open={open1} anchorEl={anchorEl} placement="left" disablePortal={false}>
 											<DetailUser user={user} />
@@ -351,15 +349,7 @@ const DashBoard = (props) => {
 					>
 						<Switch>
 							{dashboardRoutes.map((route, index) => {
-								return (
-									<Route
-										key={index}
-										path={route.path}
-										exact={route.exact}
-										name={route.name}
-										component={route.component}
-									/>
-								);
+								return <Route key={index} path={route.path} exact={route.exact} component={route.component} />;
 							})}
 						</Switch>
 					</main>

@@ -3,7 +3,7 @@ import * as types from './actions';
 const initialState = {
 	users: {},
 	user_assign: [],
-	user_online: {}
+	user_online: []
 };
 export default {
 	name: types.NAME_REDUCER,

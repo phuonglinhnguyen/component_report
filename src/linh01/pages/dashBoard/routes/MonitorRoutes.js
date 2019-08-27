@@ -3,10 +3,6 @@ export default [
 		name: 'All',
 		children: [
 			{
-				name: 'Test Bpmn Viewer',
-				url: '/dashboard/test_bpmn_viewer'
-			},
-			{
 				name: 'Capture Monitoring',
 				url: '/dashboard/capture_monitoring'
 			},
@@ -14,6 +10,10 @@ export default [
 				name: 'Report Performance',
 				url: '/dashboard/report_performance'
 			},
+			{
+				name:'Ancestry',
+				url: '/dashboard/capture_monitoring'
+			}
 		]
 	}
 ];

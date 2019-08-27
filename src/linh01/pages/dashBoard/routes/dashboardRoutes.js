@@ -1,11 +1,12 @@
 import ReportPrtformance from '../../ReportPrtformance';
 import CaptureMonitoring from '../../CaptureMonitoring';
 import TestViewBPMN from '../../testViewBPMN';
+import { getProjects } from '../../../../providers/data/mockData/projects';
+const projects = getProjects();
 
 const dashboardRoutes = [
-	{ path: '/dashboard/capture_monitoring', exact: true, name: 'Capture Monitoring', component: CaptureMonitoring },
-	{ path: '/dashboard/report_performance', exact: true, name: 'Report Performance', component: ReportPrtformance },
-	{ path: '/dashboard/test_bpmn_viewer', exact: true, name: 'Test Bpmn Viewer', component: TestViewBPMN }
+	{ path: '/dashboard/test', exact: true, component: CaptureMonitoring },
+	// { path: '/dashboard/report_performance', exact: true,  component: ReportPrtformance },
 ];
 
 export default dashboardRoutes;

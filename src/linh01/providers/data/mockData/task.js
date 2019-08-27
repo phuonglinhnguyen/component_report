@@ -34,7 +34,7 @@ export const getDataUsers = () => {
 			fullname: 'Nguyễn Phương Linh',
 			groupname: 'Phương Linh',
 			task_id: '01d8a757-b2ae-11e9-b018-4e9fa7f58ce7',
-			taskName: 'classify',
+			taskName: 'classify'
 		},
 		{
 			user_id: '254',
@@ -42,7 +42,7 @@ export const getDataUsers = () => {
 			fullname: 'Võ Trung Quân',
 			groupname: 'Trung Quân',
 			task_id: '01d8a757-b2ae-11e9-b018-4e9fa7f58ce7',
-			taskName: 'orm',
+			taskName: 'orm'
 		},
 		{
 			user_id: '365',
@@ -50,45 +50,10 @@ export const getDataUsers = () => {
 			fullname: 'Nguyễn Phương Linh',
 			groupname: 'Trung Quân',
 			task_id: '01d8a757-b2ae-11e9-b018-4e9fa7f58ce7',
-			taskName: 'classify',
+			taskName: 'classify'
 		}
 	];
 };
-export const getStatusUser= () => {
-	return [
-		{
-      "production": {
-        "116_190725_099_49306_001_DE_Card": {
-          "dashboard": {
-            "users": [
-              "nhhien"
-            ]
-          },
-           "Keying": {
-            "users": [
-              "linhnp"
-            ]
-          },
-          "Classify": {
-            "users": [
-              "tinhht"
-            ]
-          }
-        }
-      }
-    }
-	];
-};
-
-// "production": {
-// 	"116_190725_099_49306_001_DE_Card": {
-// 		"dashboard": {
-// 			"users": [
-// 				"tinhht"
-// 			]
-// 		}
-// 	}
-// }
 
 // active: true
 // created_date: "2019-08-06T11:00:53.256Z"

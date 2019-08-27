@@ -1,14 +1,16 @@
-import { notificationDataProvider } from "@dgtx/core-component-ui";
-import change_password from "./change_password";
-import users from "./users";
+import { notificationDataProvider } from '@dgtx/core-component-ui';
+import change_password from './change_password';
+import user_onlines from './user_onlines';
+import user_assign from './user_assign';
 export {
-  notificationDataProvider,
-  change_password,
-  // getAppRoutes
-  // user,
-  // group,
-  // project,
-  // task_info,
-  users,
-  // user_role_management
+	notificationDataProvider,
+	change_password,
+	user_assign,
+	// getAppRoutes
+	// user,
+	// group,
+	// project,
+	// task_info,
+	user_onlines
+	// user_role_management
 };

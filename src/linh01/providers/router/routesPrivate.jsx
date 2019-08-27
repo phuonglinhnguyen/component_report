@@ -1,4 +1,4 @@
-import { Page404, DashboardPage } from '../../views';
+import { Page404, DashboardPage ,CaptureMonitoringPage} from '../../views';
 export default [
 	{
 		name: 'home',
@@ -13,10 +13,10 @@ export default [
 		component: DashboardPage
 	},
 	{
-		name: 'home',
+		name: 'test',
 		exact: true,
-		path: '/home',
-		component: DashboardPage
+		path: '/dashboard/test',
+		component: CaptureMonitoringPage
 	},
 	{
 		name: 'page404',
